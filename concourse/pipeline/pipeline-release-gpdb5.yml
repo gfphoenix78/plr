@@ -28,6 +28,12 @@ resources:
     repository: pivotaldata/centos-gpdb-dev
     tag: '7-gcc6.2-llvm3.7'
 
+- name: suse11-gpdb-dev
+  type: docker-image
+  source:
+    repository: pivotaldata/sles-gpdb-dev
+    tag: '11-beta'
+
 # Github Source Codes
 
 - name: gpdb_src
@@ -206,11 +212,13 @@ jobs:
 - name: plr_suse11_release
   plan:
   - aggregate:
+    - get: suse11-gpdb-dev
     - get: plr_src
       trigger: true
     - get: plr_gpdb_suse11_build
   - task: release_PLR
-    file: plr_src/concourse/tasks/release_plr_sles.yml
+    file: plr_src/concourse/tasks/release_plr.yml
+    image: suse11-gpdb-dev
     input_mapping:
       bin_plr: plr_gpdb_suse11_build
     output_mapping:
@@ -263,13 +271,15 @@ jobs:
 - name: plr_suse11_test
   plan:
   - aggregate:
+    - get: suse11-gpdb-dev
     - get: plr_src
     - get: plr_gpdb_suse11_release
     - get: bin_gpdb_suse11
       trigger: true
     - get: gpdb_src
   - task: Test_PLR
-    file: plr_src/concourse/tasks/test_plr_sles.yml
+    file: plr_src/concourse/tasks/test_plr.yml
+    image: suse11-gpdb-dev
     input_mapping:
       bin_gpdb: bin_gpdb_suse11
       bin_plr: plr_gpdb_suse11_release
