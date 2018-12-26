@@ -10,7 +10,8 @@ if [ "$OSVER" == "centos5" ]; then
     source /opt/gcc_env.sh
 fi
 
-if [ "$OSVER" == "suse11" ]; then
+case "$OSVER" in
+suse11)
     zypper addrepo http://download.opensuse.org/distribution/11.4/repo/oss/ oss
     zypper --no-gpg-checks -n install -f binutils
     zypper --no-gpg-checks -n install subversion
@@ -19,12 +20,17 @@ if [ "$OSVER" == "suse11" ]; then
     zypper --no-gpg-checks -n install texlive-latex
     zypper --no-gpg-checks -n install libopenssl-devel openssl
     zypper --no-gpg-checks -n install wget
-else
+    ;;
+centos*)
     yum install -y subversion
     yum install -y gcc gcc-c++ gcc-gfortran
     yum install -y 'texlive-*'
     yum install -y wget
-fi
+    ;;
+ubuntu*)
+    apt install -y wget fort77
+    ;;
+esac
 
 
 # Zlib dependency
