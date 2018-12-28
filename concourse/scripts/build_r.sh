@@ -28,7 +28,8 @@ centos*)
     yum install -y wget
     ;;
 ubuntu*)
-    apt install -y wget fort77
+    apt update
+    apt install -y gfortran
     ;;
 esac
 

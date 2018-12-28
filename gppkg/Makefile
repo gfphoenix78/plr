@@ -8,6 +8,8 @@ include $(PGXS)
 
 OS=$(word 1,$(subst _, ,$(BLD_ARCH)))
 ARCH=$(shell uname -p)
+export OS
+export ARCH
 
 PLR_DIR=$(shell cd .. && pwd)
 include $(PLR_DIR)/gppkg/release.mk
